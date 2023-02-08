@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios';
 import HeaderApp from './components/HeaderApp.vue';
 import MainApp from './components/MainApp.vue';
 import FooterApp from './components/FooterApp.vue';
@@ -7,6 +8,7 @@ export default {
   
   data() {
     return {
+      cards: [],
     }
   },
 
@@ -15,6 +17,17 @@ export default {
     MainApp,
     FooterApp,
   },
+
+  created(){
+    //1. recupero le info di axios dopo averlo installato
+    axios 
+    .get('https://db.ygoprodeck.com/api/v7/cardinfo.php') 
+    .then((response) => {
+      console.log(response.data.data.slice(0,30));
+      this.cards = response.data.data.slice(0,30);
+    });
+  },
+
 }
 
 </script>
@@ -23,12 +36,12 @@ export default {
 
   <HeaderApp />
 
-  <MainApp />
+  <MainApp :cardList="cards"/>
 
   <FooterApp />
 
 </template>
 
 <style lang="scss">
-  @use "./styles/main.scss";
+@import './styles/main.scss';
 </style>
