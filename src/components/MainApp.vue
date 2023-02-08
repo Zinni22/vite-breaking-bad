@@ -1,12 +1,14 @@
 <script>
-import { createHydrationRenderer } from 'vue';
+import {store} from '../store';
 import CharacterCard from './CharacterCard.vue';
 
 export default {
 
   name: 'MainApp',
-  props: {
-    cardList: Array,
+  data() {
+    return {
+      store,
+    }
   },
 
   components:{
@@ -39,7 +41,7 @@ export default {
 
                     <div class="row g-2">
 
-                        <div class="col-2" v-for="card in cardList">
+                        <div class="col-2" v-for="card in store.cards">
                             
                             <CharacterCard :character = card />
 
