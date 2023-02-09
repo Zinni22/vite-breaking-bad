@@ -17,7 +17,7 @@ export default {
     <div class="box">
         <img :src="character.card_images[0].image_url" alt="">
         <h5>{{character.name}}</h5>
-        <p>{{character.race}}</p>
+        <p>{{character.archetype}}</p>
     </div>
 
 </div>

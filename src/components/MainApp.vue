@@ -1,19 +1,58 @@
 <script>
+import axios from 'axios';
 import {store} from '../store';
+
 import CharacterCard from './CharacterCard.vue';
 
 export default {
 
-  name: 'MainApp',
-  data() {
-    return {
-      store,
-    }
-  },
+    name: 'MainApp',
+    data() {
+        return {
+        store,
+        }
+    },
 
-  components:{
-    CharacterCard,
-}
+    components:{
+        CharacterCard,
+    },
+
+    methods:{
+
+        changeCard(){
+            console.log('ho cambiato carta')
+
+            axios
+            .get('https://db.ygoprodeck.com/api/v7/cardinfo.php', {
+                params:{
+                archetype: this.store.archetypeValue
+                }
+            })
+            .then((response) => {
+                console.log('dopo che ho selezionato', response.data.data.slice(0,30));
+                this.store.cards = response.data.data.slice(0,30);
+            })
+        }
+
+    },
+
+    created(){
+        //1. recupero le info delle carte
+        axios 
+        .get('https://db.ygoprodeck.com/api/v7/cardinfo.php') 
+        .then((response) => {
+        console.log(response.data.data.slice(0,30));
+        this.store.cards = response.data.data.slice(0,30);
+        });
+
+        // 2. recupero le info degli archetype
+        axios
+        .get("https://db.ygoprodeck.com/api/v7/archetypes.php")
+        .then ((response) => {
+            console.log(response.data.slice(0,30));
+            this.store.archetypes = response.data.slice(0,30);
+        });
+    },
 
 }
 </script>
@@ -27,11 +66,16 @@ export default {
             <!-- SELECT SECTION -->
             <div class="row">
                 <div class="col-auto mb-4">
-                    <select aria-label="Select status">
+                    <select aria-label="Select status"
+                    v-model="store.statusValue"
+                    @change="changeCard()">
                         <option selected value="">Select status</option>
-                        <option value="idk">idk</option>
-                        <option value="idk">idk</option>
-                        <option value="idk">idk</option>
+
+                        <option v-for="item in store.archetypes"
+                        :value="item.archetype_name">
+                            {{item.archetype_name}}
+                        </option>
+
                     </select>
                 </div>
             </div>
