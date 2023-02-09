@@ -19,15 +19,11 @@ export default {
 
     methods:{
 
-        changeCard(){
+        changeCard(archetype){
             console.log('ho cambiato carta')
 
             axios
-            .get('https://db.ygoprodeck.com/api/v7/cardinfo.php', {
-                params:{
-                archetype: this.store.archetypeValue
-                }
-            })
+            .get(`https://db.ygoprodeck.com/api/v7/cardinfo.php?archetype=${archetype}`)
             .then((response) => {
                 console.log('dopo che ho selezionato', response.data.data.slice(0,30));
                 this.store.cards = response.data.data.slice(0,30);
@@ -68,7 +64,7 @@ export default {
                 <div class="col-auto mb-4">
                     <select aria-label="Select status"
                     v-model="store.statusValue"
-                    @change="changeCard()">
+                    @change="changeCard(store.statusValue)">
                         <option selected value="">Select status</option>
 
                         <option v-for="item in store.archetypes"
